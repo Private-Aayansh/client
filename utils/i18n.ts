@@ -173,6 +173,23 @@ const translations = {
       completedJobs: 'Completed Jobs',
       appliedJobs: 'Applied Jobs',
     },
+    // Services
+    services: {
+      title: 'Services',
+      createService: 'Create Service',
+      myServices: 'My Services',
+      nearbyServices: 'Nearby Services',
+      serviceType: 'Service Type',
+      serviceDescription: 'Service Description',
+      serviceCost: 'Service Cost',
+      bookService: 'Book Service',
+      serviceBooked: 'Service booked successfully',
+      serviceCreated: 'Service created successfully',
+      serviceDeleted: 'Service deleted successfully',
+      noServicesFound: 'No services found',
+      searchServices: 'Search services...',
+      filterServices: 'Filter Services',
+    },
     // Job List
     jobList: {
       noJobs: {
@@ -398,6 +415,23 @@ const translations = {
       activeJobs: 'सक्रिय काम',
       completedJobs: 'पूर्ण काम',
       appliedJobs: 'आवेदन किए गए काम',
+    },
+    // Services
+    services: {
+      title: 'सेवाएं',
+      createService: 'सेवा बनाएं',
+      myServices: 'मेरी सेवाएं',
+      nearbyServices: 'आस-पास की सेवाएं',
+      serviceType: 'सेवा का प्रकार',
+      serviceDescription: 'सेवा का विवरण',
+      serviceCost: 'सेवा की लागत',
+      bookService: 'सेवा बुक करें',
+      serviceBooked: 'सेवा सफलतापूर्वक बुक की गई',
+      serviceCreated: 'सेवा सफलतापूर्वक बनाई गई',
+      serviceDeleted: 'सेवा सफलतापूर्वक हटाई गई',
+      noServicesFound: 'कोई सेवा नहीं मिली',
+      searchServices: 'सेवाएं खोजें...',
+      filterServices: 'सेवाएं फिल्टर करें',
     },
     // Job List
     jobList: {

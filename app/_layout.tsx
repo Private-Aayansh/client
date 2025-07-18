@@ -19,6 +19,7 @@ export default function RootLayout() {
           <Stack.Screen name="profile" />
           <Stack.Screen name="chat" />
           <Stack.Screen name="create-job-modal" options={{ presentation: 'modal' }} />
+          <Stack.Screen name="create-service-modal" options={{ presentation: 'modal' }} />
           <Stack.Screen name="+not-found" />
         </Stack>
         <StatusBar style="auto" />

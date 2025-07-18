@@ -180,6 +180,45 @@ export class ApiClient {
       method: 'POST',
     });
   }
+
+  // Service Management APIs
+  async createService(data: {
+    service_name: string;
+    description?: string;
+    latitude: number;
+    longitude: number;
+    cost: number;
+    status?: number;
+  }) {
+    return this.request('/api/service', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async getMyServices() {
+    return this.request<any[]>('/api/service', {
+      method: 'GET',
+    });
+  }
+
+  async deleteService(serviceId: number) {
+    return this.request(`/api/service/${serviceId}`, {
+      method: 'DELETE',
+    });
+  }
+
+  async getNearbyServices(latitude: number, longitude: number, k: number = 5) {
+    const params = new URLSearchParams({
+      latitude: latitude.toString(),
+      longitude: longitude.toString(),
+      k: k.toString(),
+    });
+    
+    return this.request<any[]>(`/api/nearby-services?${params.toString()}`, {
+      method: 'GET',
+    });
+  }
 }''
 
 export const apiClient = ApiClient.getInstance();
