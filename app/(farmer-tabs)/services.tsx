@@ -254,7 +254,7 @@ export default function FarmerServices() {
           onPress={() => setShowMyServices(false)}
         >
           <Text style={[styles.tabText, !showMyServices && styles.activeTabText]}>
-            Nearby Services
+            {t('services.nearbyServices')}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -262,7 +262,7 @@ export default function FarmerServices() {
           onPress={() => setShowMyServices(true)}
         >
           <Text style={[styles.tabText, showMyServices && styles.activeTabText]}>
-            My Services
+            {t('services.myServices')}
           </Text>
         </TouchableOpacity>
       </View>
@@ -357,7 +357,7 @@ export default function FarmerServices() {
                     onPress={() => handleBookService(service)}
                   >
                     <MessageCircle size={16} color="#FFFFFF" />
-                    <Text style={styles.bookText}>Book Now</Text>
+                    <Text style={styles.bookText}>{t('services.bookNow')}</Text>
                   </TouchableOpacity>
                 )}
               </View>

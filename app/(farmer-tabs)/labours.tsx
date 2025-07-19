@@ -112,6 +112,7 @@ export default function FarmerLabours() {
             <Filter size={24} color="#374151" />
           </TouchableOpacity>
         </View>
+        <Text style={styles.subtitle}>{t('jobs.manageJobPostings')}</Text>
       </View>
 
       <ScrollView style={styles.jobList} showsVerticalScrollIndicator={false}>
@@ -162,14 +163,14 @@ export default function FarmerLabours() {
                     <DollarSign size={14} color="#22C55E" />
                   </View>
                   <Text style={styles.metricValue}>₹{job.daily_wage}</Text>
-                  <Text style={styles.metricLabel}>per day</Text>
+                  <Text style={styles.metricLabel}>{t('jobs.perDay')}</Text>
                 </View>
                 <View style={styles.metricItem}>
                   <View style={styles.metricIcon}>
                     <Users size={14} color="#3B82F6" />
                   </View>
                   <Text style={styles.metricValue}>{job.number_of_labourers}</Text>
-                  <Text style={styles.metricLabel}>labourers</Text>
+                  <Text style={styles.metricLabel}>{t('jobs.labourers')}</Text>
                 </View>
               </View>
 
@@ -195,7 +196,7 @@ export default function FarmerLabours() {
 
               {job.required_skills && job.required_skills.length > 0 && (
                 <View style={styles.skillsSection}>
-                  <Text style={styles.skillsLabel}>Required Skills:</Text>
+                  <Text style={styles.skillsLabel}>{t('jobs.requiredSkills')}</Text>
                   <View style={styles.skillsContainer}>
                     {job.required_skills.slice(0, 3).map((skill, index) => (
                       <View key={index} style={styles.skillBadge}>

@@ -152,7 +152,7 @@ export default function LabourJobs() {
       return (
         <View style={styles.centered}>
           <ActivityIndicator size="large" color="#8B4513" />
-          <Text style={styles.loadingText}>Finding jobs near you...</Text>
+          <Text style={styles.loadingText}>{t('jobs.findingJobsNearYou')}</Text>
         </View>
       );
     }
@@ -173,7 +173,7 @@ export default function LabourJobs() {
       return (
         <View style={styles.centered}>
           <Briefcase size={64} color="#D1D5DB" />
-          <Text style={styles.emptyText}>No jobs found within {radius}km.</Text>
+          <Text style={styles.emptyText}>{t('jobs.noJobsFound')}</Text>
           <Text style={styles.emptySubText}>Try increasing the search radius.</Text>
         </View>
       );
@@ -235,7 +235,7 @@ export default function LabourJobs() {
 
             {job.required_skills && job.required_skills.length > 0 && (
               <View style={styles.skillsSection}>
-                <Text style={styles.skillsLabel}>Required Skills:</Text>
+                <Text style={styles.skillsLabel}>{t('jobs.requiredSkills')}</Text>
                 <View style={styles.skillsContainer}>
                   {job.required_skills.slice(0, 3).map((skill, index) => (
                     <View key={index} style={styles.skillBadge}>
@@ -267,7 +267,7 @@ export default function LabourJobs() {
               </View>
               <TouchableOpacity style={styles.messageButton} onPress={() => handleApply(job)}>
                 <MessageSquare size={18} color="#FFFFFF" />
-                <Text style={styles.messageButtonText}>Apply</Text>
+                <Text style={styles.messageButtonText}>{t('jobs.apply')}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -279,7 +279,7 @@ export default function LabourJobs() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Nearby Jobs</Text>
+        <Text style={styles.title}>{t('jobs.nearbyJobs')}</Text>
         <TouchableOpacity onPress={() => setShowRadiusModal(true)} style={styles.filterButton}>
           <Filter size={24} color="#1F2937" />
         </TouchableOpacity>

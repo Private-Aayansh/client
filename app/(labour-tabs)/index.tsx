@@ -165,24 +165,24 @@ export default function LabourHome() {
           <TouchableOpacity style={styles.searchButton} onPress={loadNearbyJobs}>
             <Search size={20} color="#6B7280" />
             <Text style={styles.searchText}>
-              {loading ? 'Searching for jobs...' : 'Refresh nearby jobs'}
+              {loading ? t('jobs.searchingNearbyJobs') : t('jobs.refreshNearbyJobs')}
             </Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.nearbyJobs}>
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Nearby Jobs</Text>
+            <Text style={styles.sectionTitle}>{t('jobs.nearbyJobs')}</Text>
             {location && (
               <Text style={styles.locationText}>
-                Within 2km of your location
+                {t('jobs.withinRadius', { radius: 2 })}
               </Text>
             )}
           </View>
 
           {loading ? (
             <View style={styles.loadingContainer}>
-              <Text style={styles.loadingText}>Loading nearby jobs...</Text>
+              <Text style={styles.loadingText}>{t('jobs.findingJobsNearYou')}</Text>
             </View>
           ) : nearbyJobs.length === 0 ? (
             <View style={styles.emptyContainer}>
@@ -245,7 +245,7 @@ export default function LabourHome() {
 
                 {job.required_skills && job.required_skills.length > 0 && (
                   <View style={styles.skillsSection}>
-                    <Text style={styles.skillsLabel}>Required Skills:</Text>
+                    <Text style={styles.skillsLabel}>{t('jobs.requiredSkills')}</Text>
                     <View style={styles.skillsContainer}>
                       {job.required_skills.slice(0, 3).map((skill, index) => (
                         <View key={index} style={styles.skillBadge}>
@@ -280,7 +280,7 @@ export default function LabourHome() {
                     onPress={() => handleMessageFarmer(job)}
                   >
                     <MessageCircle size={16} color="#FFFFFF" />
-                    <Text style={styles.messageText}>Apply</Text>
+                    <Text style={styles.messageText}>{t('jobs.apply')}</Text>
                   </TouchableOpacity>
                 </View>
               </View>

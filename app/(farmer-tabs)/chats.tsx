@@ -110,14 +110,14 @@ export default function FarmerChats() {
       <ScrollView style={styles.chatList} showsVerticalScrollIndicator={false}>
         {loading ? (
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>Loading chats...</Text>
+            <Text style={styles.emptyText}>{t('chat.loadingChats')}</Text>
           </View>
         ) : chats.length === 0 ? (
           <View style={styles.emptyContainer}>
             <MessageCircle size={64} color="#D1D5DB" />
-            <Text style={styles.emptyText}>No chats yet</Text>
+            <Text style={styles.emptyText}>{t('chat.noChatsYet')}</Text>
             <Text style={styles.emptySubtext}>
-              Chats will appear here when labourers message you about jobs
+              {t('chat.chatsWillAppear')}
             </Text>
           </View>
         ) : (

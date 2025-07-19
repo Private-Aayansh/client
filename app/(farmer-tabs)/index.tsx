@@ -275,7 +275,7 @@ export default function FarmerHome() {
           <View style={styles.welcomeContent}>
             <Text style={styles.greeting}>{t('dashboard.welcome')}</Text>
             <Text style={styles.username}>{user?.name || 'Farmer'}</Text>
-            <Text style={styles.subtitle}>Let's grow together today</Text>
+            <Text style={styles.subtitle}>{t('home.letsGrowTogether')}</Text>
           </View>
           <View style={styles.heroDecoration}>
             <View style={styles.floatingIcon}>
@@ -311,10 +311,10 @@ export default function FarmerHome() {
               <View style={styles.sectionIcon}>
                 <Camera size={20} color="#22C55E" />
               </View>
-              <Text style={styles.sectionTitle}>AI Plant Doctor</Text>
+              <Text style={styles.sectionTitle}>{t('home.aiPlantDoctor')}</Text>
             </View>
             <Text style={styles.sectionSubtitle}>
-              Instant disease detection with AI-powered recommendations
+              {t('home.instantDiseaseDetection')}
             </Text>
           </View>
 
@@ -323,12 +323,12 @@ export default function FarmerHome() {
               <View style={styles.imagePickerIcon}>
                 <Camera size={32} color="#22C55E" />
               </View>
-              <Text style={styles.imagePickerTitle}>Scan Your Plant</Text>
+              <Text style={styles.imagePickerTitle}>{t('home.scanYourPlant')}</Text>
               <Text style={styles.imagePickerSubtitle}>
-                Get instant AI diagnosis in seconds
+                {t('home.getInstantDiagnosis')}
               </Text>
               <View style={styles.imagePickerButton}>
-                <Text style={styles.imagePickerButtonText}>Start Scan</Text>
+                <Text style={styles.imagePickerButtonText}>{t('home.startScan')}</Text>
               </View>
             </TouchableOpacity>
           ) : (
