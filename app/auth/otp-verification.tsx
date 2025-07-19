@@ -175,7 +175,7 @@ export default function OTPVerification() {
         <TouchableOpacity onPress={() => router.back()}>
           <ArrowLeft size={24} color="#374151" />
         </TouchableOpacity>
-        <Logo size="small" variant="horizontal" />
+        <Logo size="medium" variant="horizontal" />
         <View style={{ width: 24 }} />
       </View>
 

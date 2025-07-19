@@ -139,7 +139,7 @@ export default function LabourHome() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Logo size="small" variant="horizontal" />
+        <Logo size="medium" variant="horizontal" />
         <View style={styles.headerActions}>
           <TouchableOpacity style={styles.notificationButton}>
             <Bell size={24} color="#374151" />
@@ -159,14 +159,7 @@ export default function LabourHome() {
           <Text style={styles.username}>{user?.name || 'Labour'}</Text>
         </View>
 
-        <View style={styles.statsGrid}>
-          {stats.map((stat, index) => (
-            <View key={index} style={styles.statCard}>
-              <Text style={[styles.statValue, { color: stat.color }]}>{stat.value}</Text>
-              <Text style={styles.statTitle}>{stat.title}</Text>
-            </View>
-          ))}
-        </View>
+        
 
         <View style={styles.searchSection}>
           <TouchableOpacity style={styles.searchButton} onPress={loadNearbyJobs}>

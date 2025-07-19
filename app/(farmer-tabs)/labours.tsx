@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Alert, Dimensions } from 'react-native';
 import { useLanguage } from '../../contexts/LanguageContext';
-import { Search, Filter, SquarePlus as PlusSquare, Trash2, MapPin, Calendar, Users, DollarSign, Clock, Star, Briefcase } from 'lucide-react-native';
+import { Search, Filter, SquarePlus as PlusSquare, Trash2, MapPin, Calendar, Users, DollarSign, Clock, Star, Briefcase, TrendingUp } from 'lucide-react-native';
 import { useRouter, useFocusEffect } from 'expo-router';
 import { apiClient } from '../../utils/api';
 import { Job } from '../../types/job';
+
+const { width } = Dimensions.get('window');
 
 export default function FarmerLabours() {
   const { t } = useLanguage();
@@ -98,7 +100,10 @@ export default function FarmerLabours() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>{t('dashboard.farmer.labours')}</Text>
+        <View style={styles.headerContent}>
+          <Text style={styles.title}>{t('dashboard.farmer.labours')}</Text>
+          <Text style={styles.subtitle}>Manage your job postings</Text>
+        </View>
         <View style={styles.headerActions}>
           <TouchableOpacity style={styles.searchButton}>
             <Search size={24} color="#374151" />
@@ -114,17 +119,29 @@ export default function FarmerLabours() {
           <ActivityIndicator size="large" color="#22C55E" style={{ marginTop: 50 }} />
         ) : jobs.length === 0 ? (
           <View style={styles.emptyContainer}>
-            <Briefcase size={64} color="#D1D5DB" />
-            <Text style={styles.emptyText}>{t('jobList.noJobs.title')}</Text>
+            <View style={styles.emptyIcon}>
+              <Briefcase size={48} color="#9CA3AF" />
+            </View>
+            <Text style={styles.emptyText}>No jobs posted yet</Text>
             <Text style={styles.emptySubtext}>{t('jobList.noJobs.subtitle')}</Text>
+            <TouchableOpacity 
+              style={styles.emptyAction}
+              onPress={() => router.push('/create-job-modal')}
+            >
+              <Text style={styles.emptyActionText}>Create Your First Job</Text>
+            </TouchableOpacity>
           </View>
         ) : (
           jobs.map(job => (
             <View key={job.id} style={styles.jobCard}>
+              <View style={styles.cardGradient} />
               <View style={styles.jobCardHeader}>
                 <View style={styles.jobTitleSection}>
                   <Text style={styles.jobTitle}>{job.title}</Text>
-                  <View style={[styles.statusBadge, { backgroundColor: getStatusColor(job.status) }]}>
+                  <View style={[
+                    styles.statusBadge, 
+                    { backgroundColor: getStatusColor(job.status) }
+                  ]}>
                     <Text style={styles.statusText}>{getStatusText(job.status)}</Text>
                   </View>
                 </View>
@@ -141,12 +158,16 @@ export default function FarmerLabours() {
 
               <View style={styles.jobMetrics}>
                 <View style={styles.metricItem}>
-                  <DollarSign size={16} color="#22C55E" />
+                  <View style={styles.metricIcon}>
+                    <DollarSign size={14} color="#22C55E" />
+                  </View>
                   <Text style={styles.metricValue}>₹{job.daily_wage}</Text>
                   <Text style={styles.metricLabel}>per day</Text>
                 </View>
                 <View style={styles.metricItem}>
-                  <Users size={16} color="#3B82F6" />
+                  <View style={styles.metricIcon}>
+                    <Users size={14} color="#3B82F6" />
+                  </View>
                   <Text style={styles.metricValue}>{job.number_of_labourers}</Text>
                   <Text style={styles.metricLabel}>labourers</Text>
                 </View>
@@ -218,7 +239,7 @@ export default function FarmerLabours() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#F7F9FC',
   },
   header: {
     flexDirection: 'row',
@@ -226,225 +247,334 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 24,
     paddingTop: 60,
-    paddingBottom: 24,
+    paddingBottom: 20,
     backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E2E8F0',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 8,
+  },
+  headerContent: {
+    flex: 1,
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: '800',
+    color: '#1E293B',
+    marginBottom: 4,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#64748B',
+    fontWeight: '500',
+  },
+  headerActions: {
+    flexDirection: 'row',
+    gap: 16,
+  },
+  searchButton: {
+    padding: 12,
+    borderRadius: 16,
+    backgroundColor: '#F8FAFC',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+  },
+  filterButton: {
+    padding: 12,
+    borderRadius: 16,
+    backgroundColor: '#F8FAFC',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+  },
+  statsContainer: {
+    flexDirection: 'row',
+    paddingHorizontal: 24,
+    paddingVertical: 20,
+    gap: 12,
+    backgroundColor: '#FFFFFF',
+  },
+  statCard: {
+    flex: 1,
+    backgroundColor: '#F8FAFC',
+    borderRadius: 16,
+    padding: 16,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+  },
+  statIcon: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 8,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 2,
   },
-  title: {
-    fontSize: 28,
-    fontWeight: '700',
+  statValue: {
+    fontSize: 20,
+    fontWeight: '800',
     color: '#1E293B',
+    marginBottom: 4,
   },
-  headerActions: {
-    flexDirection: 'row',
-    gap: 12,
-  },
-  searchButton: {
-    padding: 10,
-    borderRadius: 12,
-    backgroundColor: '#F1F5F9',
-  },
-  filterButton: {
-    padding: 10,
-    borderRadius: 12,
-    backgroundColor: '#F1F5F9',
+  statLabel: {
+    fontSize: 12,
+    color: '#64748B',
+    fontWeight: '600',
+    textAlign: 'center',
   },
   jobList: {
     flex: 1,
-    paddingHorizontal: 24,
-    paddingTop: 16,
+    paddingTop: 8,
   },
   emptyContainer: {
-    flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 100,
+    paddingVertical: 80,
+    paddingHorizontal: 32,
+  },
+  emptyIcon: {
+    width: 96,
+    height: 96,
+    borderRadius: 48,
+    backgroundColor: '#F3F4F6',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 24,
   },
   emptyText: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: '#64748B',
-    marginTop: 16,
-    marginBottom: 8,
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#1E293B',
+    marginBottom: 12,
+    textAlign: 'center',
   },
   emptySubtext: {
-    fontSize: 16,
-    color: '#94A3B8',
+    fontSize: 17,
+    color: '#64748B',
     textAlign: 'center',
+    lineHeight: 24,
+    marginBottom: 32,
+  },
+  emptyAction: {
+    backgroundColor: '#22C55E',
     paddingHorizontal: 32,
+    paddingVertical: 16,
+    borderRadius: 16,
+    shadowColor: '#22C55E',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  emptyActionText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '700',
   },
   fab: {
     position: 'absolute',
-    width: 64,
-    height: 64,
+    width: 68,
+    height: 68,
     alignItems: 'center',
     justifyContent: 'center',
     right: 24,
     bottom: 24,
     backgroundColor: '#22C55E',
-    borderRadius: 32,
-    elevation: 8,
+    borderRadius: 34,
     shadowColor: '#22C55E',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 0.4,
+    shadowRadius: 20,
+    elevation: 12,
   },
   jobCard: {
+    position: 'relative',
     backgroundColor: '#FFFFFF',
-    borderRadius: 20,
-    padding: 20,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderRadius: 24,
+    padding: 24,
+    marginHorizontal: 24,
+    marginBottom: 20,
+    overflow: 'hidden',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.12,
+    shadowRadius: 20,
+    elevation: 8,
+  },
+  cardGradient: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: 'rgba(34, 197, 94, 0.03)',
+    transform: [{ translateX: 20 }, { translateY: -20 }],
   },
   jobCardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: 12,
+    marginBottom: 16,
   },
   jobTitleSection: {
     flex: 1,
-    marginRight: 12,
+    marginRight: 16,
   },
   jobTitle: {
-    fontSize: 20,
-    fontWeight: '700',
+    fontSize: 22,
+    fontWeight: '800',
     color: '#1E293B',
-    marginBottom: 8,
+    marginBottom: 12,
+    lineHeight: 28,
   },
   statusBadge: {
     alignSelf: 'flex-start',
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-    borderRadius: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 6,
+    borderRadius: 16,
   },
   statusText: {
-    fontSize: 12,
-    fontWeight: '600',
+    fontSize: 13,
+    fontWeight: '700',
     color: '#FFFFFF',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   deleteButton: {
-    padding: 8,
-    borderRadius: 10,
+    padding: 12,
+    borderRadius: 16,
     backgroundColor: '#FEF2F2',
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#FECACA',
   },
   jobDescription: {
-    fontSize: 16,
+    fontSize: 17,
     color: '#64748B',
-    lineHeight: 24,
-    marginBottom: 16,
+    lineHeight: 26,
+    marginBottom: 20,
+    fontWeight: '500',
   },
   jobMetrics: {
     flexDirection: 'row',
-    gap: 24,
-    marginBottom: 16,
-    paddingVertical: 16,
-    paddingHorizontal: 16,
-    backgroundColor: '#F8FAFC',
-    borderRadius: 12,
+    gap: 20,
+    marginBottom: 20,
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    backgroundColor: '#F9FAFB',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#F3F4F6',
   },
   metricItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: 8,
+  },
+  metricIcon: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   metricValue: {
-    fontSize: 18,
-    fontWeight: '700',
+    fontSize: 20,
+    fontWeight: '800',
     color: '#1E293B',
   },
   metricLabel: {
-    fontSize: 14,
+    fontSize: 13,
     color: '#64748B',
+    fontWeight: '600',
   },
   jobDetails: {
-    gap: 8,
-    marginBottom: 16,
+    gap: 12,
+    marginBottom: 20,
   },
   detailRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 12,
   },
   detailText: {
-    fontSize: 14,
+    fontSize: 15,
     color: '#64748B',
     flex: 1,
+    fontWeight: '500',
   },
   skillsSection: {
-    marginBottom: 16,
+    marginBottom: 20,
   },
   skillsLabel: {
-    fontSize: 14,
-    fontWeight: '600',
+    fontSize: 15,
+    fontWeight: '700',
     color: '#374151',
-    marginBottom: 8,
+    marginBottom: 12,
   },
   skillsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
+    gap: 10,
   },
   skillBadge: {
-    backgroundColor: '#EFF6FF',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
+    backgroundColor: '#F0F9FF',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#DBEAFE',
+    borderColor: '#E0F2FE',
   },
   skillText: {
-    fontSize: 12,
-    fontWeight: '500',
-    color: '#1D4ED8',
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#0369A1',
   },
   perksSection: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-    marginBottom: 16,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
+    gap: 12,
+    marginBottom: 20,
+    paddingVertical: 16,
+    paddingHorizontal: 20,
     backgroundColor: '#FFFBEB',
-    borderRadius: 12,
+    borderRadius: 16,
     borderWidth: 1,
     borderColor: '#FEF3C7',
   },
   perksText: {
-    fontSize: 14,
+    fontSize: 15,
     color: '#92400E',
-    fontWeight: '500',
+    fontWeight: '600',
     flex: 1,
   },
   jobFooter: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingTop: 16,
+    paddingTop: 20,
     borderTopWidth: 1,
-    borderTopColor: '#F1F5F9',
+    borderTopColor: '#F3F4F6',
   },
   jobId: {
-    fontSize: 12,
-    fontWeight: '600',
+    fontSize: 13,
+    fontWeight: '700',
     color: '#94A3B8',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   postedDate: {
-    fontSize: 12,
+    fontSize: 13,
     color: '#94A3B8',
+    fontWeight: '500',
   },
 });

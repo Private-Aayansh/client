@@ -148,29 +148,18 @@ export default function LabourChats() {
                   {user && chat.unreadCount[user.id] > 0 && (
                     <View style={styles.unreadBadge}>
                       <Text style={styles.unreadText}>
-                        {chat.unreadCount[user.name]}
+                        {chat.unreadCount[user.id]}
                       </Text>
                     </View>
                   )}
                 </View>
-              </View>
-
-              <View style={styles.chatActions}>
-                <TouchableOpacity style={styles.actionButton}>
-                  <Phone size={20} color="#6B7280" />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.actionButton}>
-                  <Video size={20} color="#6B7280" />
-                </TouchableOpacity>
               </View>
             </TouchableOpacity>
           ))
         )}
       </ScrollView>
 
-      <TouchableOpacity style={styles.fab}>
-        <MessageCircle size={24} color="#FFFFFF" />
-      </TouchableOpacity>
+      
     </View>
   );
 }

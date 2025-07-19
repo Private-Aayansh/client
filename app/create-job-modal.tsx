@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { Platform } from 'react-native';
 import { Stack, useRouter } from 'expo-router';
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
@@ -18,8 +20,8 @@ export default function CreateJobModal() {
     required_skills: '',
     daily_wage: '',
     perks: '',
-    start_date: '',
-    end_date: '',
+    start_date: new Date(),
+    end_date: new Date(),
   });
 
   const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
@@ -27,6 +29,8 @@ export default function CreateJobModal() {
   const [locationLoading, setLocationLoading] = useState(false);
   const [errors, setErrors] = useState<{[key: string]: string}>({});
   const [apiError, setApiError] = useState<string>('');
+  const [showStartDatePicker, setShowStartDatePicker] = useState(false);
+  const [showEndDatePicker, setShowEndDatePicker] = useState(false);
 
   const requestLocation = useCallback(async () => {
     setLocationLoading(true);
@@ -95,7 +99,7 @@ export default function CreateJobModal() {
       newErrors.daily_wage = 'Please enter a valid daily wage';
     }
 
-    if (!formData.start_date.trim()) {
+    if (!formData.start_date) {
       newErrors.start_date = 'Start date is required';
     }
 
@@ -127,8 +131,8 @@ export default function CreateJobModal() {
         perks: formData.perks.trim() 
           ? formData.perks.split(',').map(perk => perk.trim()).filter(perk => perk)
           : undefined,
-        start_date: new Date(formData.start_date).toISOString(),
-        end_date: formData.end_date.trim() ? new Date(formData.end_date).toISOString() : undefined,
+        start_date: formData.start_date.toISOString(),
+        end_date: formData.end_date ? formData.end_date.toISOString() : undefined,
       };
 
       await apiClient.createJob(jobData);
@@ -147,8 +151,26 @@ export default function CreateJobModal() {
     }
   };
 
-  const handleDateChange = (field: 'start_date' | 'end_date', value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+  const handleStartDateChange = (event: any, selectedDate?: Date) => {
+    setShowStartDatePicker(Platform.OS === 'ios');
+    if (selectedDate) {
+      setFormData(prev => ({ ...prev, start_date: selectedDate }));
+    }
+  };
+
+  const handleEndDateChange = (event: any, selectedDate?: Date) => {
+    setShowEndDatePicker(Platform.OS === 'ios');
+    if (selectedDate) {
+      setFormData(prev => ({ ...prev, end_date: selectedDate }));
+    }
+  };
+
+  const formatDateForDisplay = (date: Date) => {
+    return date.toLocaleDateString('en-IN', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
   };
 
   return (
@@ -263,23 +285,27 @@ export default function CreateJobModal() {
 
           <View style={styles.dateInputContainer}>
             <Text style={styles.dateLabel}>Start Date *</Text>
-            <Input
-              placeholder="YYYY-MM-DD"
-              value={formData.start_date}
-              onChangeText={(text) => handleDateChange('start_date', text)}
-              error={errors.start_date}
-            />
-            {/* TODO: Integrate a date picker here */}
+            <TouchableOpacity
+              style={[styles.datePickerButton, errors.start_date && styles.datePickerButtonError]}
+              onPress={() => setShowStartDatePicker(true)}
+            >
+              <Text style={styles.datePickerText}>
+                {formatDateForDisplay(formData.start_date)}
+              </Text>
+            </TouchableOpacity>
+            {errors.start_date && <Text style={styles.errorText}>{errors.start_date}</Text>}
           </View>
 
           <View style={styles.dateInputContainer}>
             <Text style={styles.dateLabel}>End Date (Optional)</Text>
-            <Input
-              placeholder="YYYY-MM-DD"
-              value={formData.end_date}
-              onChangeText={(text) => handleDateChange('end_date', text)}
-            />
-            {/* TODO: Integrate a date picker here */}
+            <TouchableOpacity
+              style={styles.datePickerButton}
+              onPress={() => setShowEndDatePicker(true)}
+            >
+              <Text style={styles.datePickerText}>
+                {formData.end_date ? formatDateForDisplay(formData.end_date) : 'Select end date'}
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -292,6 +318,26 @@ export default function CreateJobModal() {
           style={styles.createButton}
         />
       </ScrollView>
+
+      {showStartDatePicker && (
+        <DateTimePicker
+          value={formData.start_date}
+          mode="date"
+          display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+          onChange={handleStartDateChange}
+          minimumDate={new Date()}
+        />
+      )}
+
+      {showEndDatePicker && (
+        <DateTimePicker
+          value={formData.end_date || new Date()}
+          mode="date"
+          display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+          onChange={handleEndDateChange}
+          minimumDate={formData.start_date}
+        />
+      )}
     </View>
   );
 }
@@ -406,6 +452,29 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#374151',
     marginBottom: 8,
+  },
+  datePickerButton: {
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    borderRadius: 16,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  datePickerButtonError: {
+    borderColor: '#EF4444',
+    shadowColor: '#EF4444',
+    shadowOpacity: 0.1,
+  },
+  datePickerText: {
+    fontSize: 16,
+    color: '#1E293B',
+    fontWeight: '500',
   },
   createButton: {
     width: '100%',

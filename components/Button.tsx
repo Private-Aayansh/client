@@ -49,51 +49,51 @@ export const Button: React.FC<ButtonProps> = ({
 
 const styles = StyleSheet.create({
   button: {
-    borderRadius: 16,
+    borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
-    elevation: 4,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.15,
+    shadowRadius: 16,
+    elevation: 8,
   },
   button_primary: {
     backgroundColor: '#22C55E',
     shadowColor: '#22C55E',
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.4,
   },
   button_secondary: {
     backgroundColor: '#8B4513',
     shadowColor: '#8B4513',
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.4,
   },
   button_outline: {
     backgroundColor: 'transparent',
-    borderWidth: 2,
+    borderWidth: 3,
     borderColor: '#22C55E',
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.05,
   },
   button_small: {
-    paddingHorizontal: 20,
-    paddingVertical: 12,
+    paddingHorizontal: 24,
+    paddingVertical: 14,
   },
   button_medium: {
-    paddingHorizontal: 32,
-    paddingVertical: 16,
+    paddingHorizontal: 36,
+    paddingVertical: 18,
   },
   button_large: {
-    paddingHorizontal: 40,
-    paddingVertical: 20,
+    paddingHorizontal: 44,
+    paddingVertical: 22,
   },
   buttonDisabled: {
-    opacity: 0.6,
-    shadowOpacity: 0.1,
+    opacity: 0.5,
+    shadowOpacity: 0.05,
   },
   text: {
-    fontWeight: '700',
-    letterSpacing: 0.5,
+    fontWeight: '800',
+    letterSpacing: 0.8,
   },
   text_primary: {
     color: '#FFFFFF',
@@ -105,12 +105,12 @@ const styles = StyleSheet.create({
     color: '#22C55E',
   },
   text_small: {
-    fontSize: 15,
+    fontSize: 16,
   },
   text_medium: {
-    fontSize: 17,
+    fontSize: 18,
   },
   text_large: {
-    fontSize: 19,
+    fontSize: 20,
   },
 });

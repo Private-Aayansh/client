@@ -163,12 +163,12 @@ export default function FarmerChats() {
               </View>
 
               <View style={styles.chatActions}>
-                <TouchableOpacity style={styles.actionButton}>
+                {/* <TouchableOpacity style={styles.actionButton}>
                   <Phone size={20} color="#6B7280" />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.actionButton}>
                   <Video size={20} color="#6B7280" />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </View>
             </TouchableOpacity>
           ))

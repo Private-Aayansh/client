@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, Image, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, Image, ActivityIndicator, Dimensions } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { useAuth } from '../../contexts/AuthContext';
-import { User, Bell, Camera, Image as ImageIcon, Play, Pause, Sun, Calendar } from 'lucide-react-native';
+import { User, Bell, Camera, Image as ImageIcon, Play, Pause, Sun, Calendar, Sparkles, Zap } from 'lucide-react-native';
 import { Logo } from '../../components/Logo';
 import * as ImagePicker from 'expo-image-picker';
 import { Audio } from 'expo-av';
+
+const { width } = Dimensions.get('window');
 
 interface DiseaseDetectionResult {
   result: boolean;
@@ -249,56 +251,85 @@ export default function FarmerHome() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Logo size="small" variant="horizontal" />
+        <View style={styles.headerLeft}>
+          <Logo size="medium" variant="horizontal" />
+        </View>
         <View style={styles.headerActions}>
           <TouchableOpacity style={styles.notificationButton}>
             <Bell size={24} color="#374151" />
+            <View style={styles.notificationDot} />
           </TouchableOpacity>
           <TouchableOpacity 
             style={styles.profileButton}
             onPress={() => router.push('/profile')}
           >
-            <User size={24} color="#374151" />
+            <View style={styles.avatarContainer}>
+              <User size={20} color="#FFFFFF" />
+            </View>
           </TouchableOpacity>
         </View>
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        <View style={styles.welcomeSection}>
-          <Text style={styles.greeting}>{t('dashboard.welcome')}</Text>
-          <Text style={styles.username}>{user?.name || 'Farmer'}</Text>
+        <View style={styles.heroSection}>
+          <View style={styles.welcomeContent}>
+            <Text style={styles.greeting}>{t('dashboard.welcome')}</Text>
+            <Text style={styles.username}>{user?.name || 'Farmer'}</Text>
+            <Text style={styles.subtitle}>Let's grow together today</Text>
+          </View>
+          <View style={styles.heroDecoration}>
+            <View style={styles.floatingIcon}>
+              <Zap size={20} color="#22C55E" />
+            </View>
+          </View>
         </View>
 
         {/* Weather Info Placeholder */}
         <View style={styles.weatherCard}>
+          <View style={styles.weatherGradient} />
           <View style={styles.weatherHeader}>
             <View style={styles.weatherInfo}>
               <Text style={styles.weatherDay}>{day}</Text>
               <Text style={styles.weatherDate}>{date}</Text>
+              {/* <Text style={styles.weatherLocation}>Your Location</Text> */}
             </View>
             <View style={styles.temperatureSection}>
-              <Sun size={32} color="#F59E0B" />
+              {/* <View style={styles.weatherIconContainer}>
+                <Sun size={28} color="#F59E0B" />
+              </View> */}
               <Text style={styles.temperature}>{temperature}</Text>
+              {/* <Text style={styles.temperatureLabel}>Sunny</Text> */}
             </View>
           </View>
         </View>
 
         {/* Disease Detector Section */}
         <View style={styles.diseaseDetectorSection}>
+          <View style={styles.sectionGradient} />
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Plant Disease Detector</Text>
+            <View style={styles.sectionTitleContainer}>
+              <View style={styles.sectionIcon}>
+                <Camera size={20} color="#22C55E" />
+              </View>
+              <Text style={styles.sectionTitle}>AI Plant Doctor</Text>
+            </View>
             <Text style={styles.sectionSubtitle}>
-              Take a photo of your plant to detect diseases and get treatment recommendations
+              Instant disease detection with AI-powered recommendations
             </Text>
           </View>
 
           {!selectedImage ? (
             <TouchableOpacity style={styles.imagePickerCard} onPress={showImagePickerOptions}>
-              <Camera size={48} color="#22C55E" />
-              <Text style={styles.imagePickerTitle}>Take Picture</Text>
+              <View style={styles.imagePickerIcon}>
+                <Camera size={32} color="#22C55E" />
+              </View>
+              <Text style={styles.imagePickerTitle}>Scan Your Plant</Text>
               <Text style={styles.imagePickerSubtitle}>
-                Tap to open camera or choose from gallery
+                Get instant AI diagnosis in seconds
               </Text>
+              <View style={styles.imagePickerButton}>
+                <Text style={styles.imagePickerButtonText}>Start Scan</Text>
+              </View>
             </TouchableOpacity>
           ) : (
             <View style={styles.detectionContainer}>
@@ -392,7 +423,7 @@ export default function FarmerHome() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#F7F9FC',
   },
   header: {
     flexDirection: 'row', 
@@ -400,63 +431,138 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 24,
     paddingTop: 60,
-    paddingBottom: 20,
+    paddingBottom: 24,
     backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E2E8F0',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  headerActions: {
-    flexDirection: 'row',
-    gap: 12,
-  },
-  notificationButton: {
-    padding: 10,
-    borderRadius: 12,
-    backgroundColor: '#F1F5F9',
-  },
-  profileButton: {
-    padding: 10,
-    borderRadius: 12,
-    backgroundColor: '#F1F5F9',
-  },
-  content: {
-    flex: 1,
-    padding: 24,
-  },
-  welcomeSection: {
-    marginBottom: 24,
-    paddingHorizontal: 4,
-  },
-  greeting: {
-    fontSize: 16,
-    color: '#64748B',
-    fontWeight: '500',
-    marginBottom: 4,
-  },
-  username: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#1E293B',
-  },
-  
-  // Weather Card Styles
-  weatherCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 20,
-    padding: 20,
-    marginBottom: 24,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.08,
     shadowRadius: 12,
-    elevation: 3,
+    elevation: 8,
+  },
+  headerLeft: {
+    position: 'relative',
+  },
+  headerBadge: {
+    position: 'absolute',
+    top: -4,
+    right: -8,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: '#22C55E',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  headerActions: {
+    flexDirection: 'row',
+    gap: 16,
+    alignItems: 'center',
+  },
+  notificationButton: {
+    position: 'relative',
+    padding: 12,
+    borderRadius: 16,
+    backgroundColor: '#F8FAFC',
     borderWidth: 1,
     borderColor: '#E2E8F0',
+  },
+  notificationDot: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#EF4444',
+  },
+  profileButton: {
+    padding: 4,
+  },
+  avatarContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#22C55E',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#22C55E',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  content: {
+    flex: 1,
+  },
+  heroSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 24,
+    paddingVertical: 32,
+    backgroundColor: '#FFFFFF',
+    marginBottom: 16,
+  },
+  welcomeContent: {
+    flex: 1,
+  },
+  greeting: {
+    fontSize: 14,
+    color: '#6B7280',
+    fontWeight: '500',
+    marginBottom: 6,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  username: {
+    fontSize: 28,
+    fontWeight: '800',
+    color: '#1E293B',
+    marginBottom: 4,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#64748B',
+    fontWeight: '500',
+  },
+  heroDecoration: {
+    position: 'relative',
+  },
+  floatingIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: '#F0FDF4',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: '#BBF7D0',
+  },
+  
+  // Weather Card Styles
+  weatherCard: {
+    position: 'relative',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 24,
+    padding: 24,
+    marginHorizontal: 24,
+    marginBottom: 20,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.12,
+    shadowRadius: 20,
+    elevation: 8,
+  },
+  weatherGradient: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: 'rgba(34, 197, 94, 0.05)',
+    transform: [{ translateX: 40 }, { translateY: -40 }],
   },
   weatherHeader: {
     flexDirection: 'row',
@@ -467,76 +573,150 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   weatherDay: {
-    fontSize: 20,
-    fontWeight: '700',
+    fontSize: 22,
+    fontWeight: '800',
     color: '#1E293B',
-    marginBottom: 4,
+    marginBottom: 6,
   },
   weatherDate: {
-    fontSize: 16,
+    fontSize: 15,
     color: '#64748B',
+    fontWeight: '600',
+    marginBottom: 4,
+  },
+  weatherLocation: {
+    fontSize: 13,
+    color: '#9CA3AF',
     fontWeight: '500',
   },
   temperatureSection: {
-    flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+  },
+  weatherIconContainer: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#FEF3C7',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 8,
   },
   temperature: {
-    fontSize: 28,
-    fontWeight: '700',
+    fontSize: 32,
+    fontWeight: '800',
     color: '#F59E0B',
+    marginBottom: 2,
+  },
+  temperatureLabel: {
+    fontSize: 12,
+    color: '#92400E',
+    fontWeight: '600',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
 
   // Disease Detector Styles
   diseaseDetectorSection: {
+    position: 'relative',
     backgroundColor: '#FFFFFF',
-    borderRadius: 20,
-    padding: 20,
+    borderRadius: 24,
+    padding: 24,
+    marginHorizontal: 24,
+    overflow: 'hidden',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
-    elevation: 3,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.12,
+    shadowRadius: 20,
+    elevation: 8,
+  },
+  sectionGradient: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: 'rgba(34, 197, 94, 0.03)',
+    transform: [{ translateX: -30 }, { translateY: -30 }],
   },
   sectionHeader: {
-    marginBottom: 20,
+    marginBottom: 24,
   },
-  sectionTitle: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: '#1E293B',
+  sectionTitleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 8,
   },
+  sectionIcon: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#F0FDF4',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 12,
+  },
+  sectionTitle: {
+    fontSize: 24,
+    fontWeight: '800',
+    color: '#1E293B',
+  },
   sectionSubtitle: {
-    fontSize: 14,
+    fontSize: 15,
     color: '#64748B',
-    lineHeight: 20,
+    lineHeight: 22,
+    fontWeight: '500',
   },
   imagePickerCard: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 40,
-    paddingHorizontal: 20,
+    paddingVertical: 48,
+    paddingHorizontal: 24,
+    borderRadius: 20,
+    backgroundColor: '#F8FAFC',
     borderWidth: 2,
-    borderColor: '#22C55E',
+    borderColor: '#E2E8F0',
     borderStyle: 'dashed',
-    borderRadius: 16,
+  },
+  imagePickerIcon: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
     backgroundColor: '#F0FDF4',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 20,
+    borderWidth: 3,
+    borderColor: '#BBF7D0',
   },
   imagePickerTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#22C55E',
-    marginTop: 12,
-    marginBottom: 4,
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#1E293B',
+    marginBottom: 8,
   },
   imagePickerSubtitle: {
-    fontSize: 14,
+    fontSize: 15,
     color: '#64748B',
     textAlign: 'center',
+    marginBottom: 24,
+    lineHeight: 22,
+  },
+  imagePickerButton: {
+    backgroundColor: '#22C55E',
+    paddingHorizontal: 32,
+    paddingVertical: 16,
+    borderRadius: 16,
+    shadowColor: '#22C55E',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  imagePickerButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '700',
   },
   detectionContainer: {
     gap: 16,

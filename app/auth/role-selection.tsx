@@ -1,9 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useLanguage } from '../../contexts/LanguageContext';
-import { Tractor, HardHat } from 'lucide-react-native';
+import { Tractor, HardHat, Sparkles, ArrowRight } from 'lucide-react-native';
 import { Logo } from '../../components/Logo';
+
+const { width, height } = Dimensions.get('window');
 
 export default function RoleSelection() {
   const router = useRouter();
@@ -22,14 +24,27 @@ export default function RoleSelection() {
         <View style={styles.circle1} />
         <View style={styles.circle2} />
       </View>
+        <View style={styles.circle4} />
       
       <View style={styles.header}>
-        <Logo size="medium" variant="horizontal" />
+        <View style={styles.headerContent}>
+          <Logo size="medium" variant="horizontal" />
+          {/* <View style={styles.headerBadge}>
+            <Sparkles size={16} color="#FFFFFF" />
+          </View> */}
+        </View>
       </View>
       
       <View style={styles.content}>
         <View style={styles.titleSection}>
-          <Text style={styles.title}>{t('auth.roleSelection')}</Text>
+          <View style={styles.titleContainer}>
+            <Text style={styles.title}>{t('auth.roleSelection')}</Text>
+            <View style={styles.titleDecoration}>
+              <View style={styles.titleDot} />
+              <View style={styles.titleDot} />
+              <View style={styles.titleDot} />
+            </View>
+          </View>
           <Text style={styles.subtitle}>{t('auth.signupSubtitle')}</Text>
         </View>
         
@@ -39,11 +54,17 @@ export default function RoleSelection() {
             onPress={() => handleRoleSelect('farmer')}
             activeOpacity={0.9}
           >
+            <View style={styles.cardGradient} />
             <View style={[styles.roleIcon, styles.farmerIcon]}>
-              <Tractor size={48} color="#22C55E" />
+              <Tractor size={40} color="#22C55E" />
             </View>
-            <Text style={[styles.roleText, styles.farmerText]}>{t('auth.farmer')}</Text>
-            <Text style={styles.roleDescription}>Post jobs and find skilled labourers</Text>
+            <View style={styles.roleContent}>
+              <Text style={[styles.roleText, styles.farmerText]}>{t('auth.farmer')}</Text>
+              <Text style={styles.roleDescription}>Post jobs and find skilled labourers</Text>
+            </View>
+            <View style={styles.roleArrow}>
+              <ArrowRight size={20} color="#22C55E" />
+            </View>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -51,11 +72,17 @@ export default function RoleSelection() {
             onPress={() => handleRoleSelect('labour')}
             activeOpacity={0.9}
           >
+            <View style={styles.cardGradient} />
             <View style={[styles.roleIcon, styles.labourIcon]}>
-              <HardHat size={48} color="#8B4513" />
+              <HardHat size={40} color="#8B4513" />
             </View>
-            <Text style={[styles.roleText, styles.labourText]}>{t('auth.labour')}</Text>
-            <Text style={styles.roleDescription}>Find work opportunities near you</Text>
+            <View style={styles.roleContent}>
+              <Text style={[styles.roleText, styles.labourText]}>{t('auth.labour')}</Text>
+              <Text style={styles.roleDescription}>Find work opportunities near you</Text>
+            </View>
+            <View style={styles.roleArrow}>
+              <ArrowRight size={20} color="#8B4513" />
+            </View>
           </TouchableOpacity>
         </View>
       </View>
@@ -66,7 +93,7 @@ export default function RoleSelection() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#F7F9FC',
     position: 'relative',
   },
   backgroundDecoration: {
@@ -79,27 +106,64 @@ const styles = StyleSheet.create({
   },
   circle1: {
     position: 'absolute',
-    width: 180,
-    height: 180,
-    borderRadius: 90,
-    backgroundColor: 'rgba(34, 197, 94, 0.08)',
-    top: 50,
-    right: -40,
+    width: 220,
+    height: 220,
+    borderRadius: 110,
+    backgroundColor: 'rgba(34, 197, 94, 0.1)',
+    top: 40,
+    right: -60,
   },
   circle2: {
     position: 'absolute',
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    backgroundColor: 'rgba(139, 69, 19, 0.08)',
-    bottom: 150,
-    left: -20,
+    width: 160,
+    height: 160,
+    borderRadius: 80,
+    backgroundColor: 'rgba(139, 69, 19, 0.06)',
+    bottom: 120,
+    left: -40,
+  },
+  circle3: {
+    position: 'absolute',
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: 'rgba(34, 197, 94, 0.05)',
+    top: height * 0.3,
+    left: 30,
+  },
+  circle4: {
+    position: 'absolute',
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: 'rgba(139, 69, 19, 0.04)',
+    bottom: height * 0.4,
+    right: 40,
   },
   header: {
     alignItems: 'center',
-    paddingTop: 80,
-    paddingBottom: 40,
+    paddingTop: 100,
+    paddingBottom: 60,
     zIndex: 1,
+  },
+  headerContent: {
+    position: 'relative',
+  },
+  headerBadge: {
+    position: 'absolute',
+    top: -8,
+    right: -12,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#22C55E',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#22C55E',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
   },
   content: {
     flex: 1,
@@ -108,60 +172,94 @@ const styles = StyleSheet.create({
   },
   titleSection: {
     alignItems: 'center',
-    marginBottom: 60,
+    marginBottom: 80,
+  },
+  titleContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  titleDecoration: {
+    flexDirection: 'row',
+    gap: 8,
+    marginTop: 16,
+  },
+  titleDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#22C55E',
   },
   title: {
-    fontSize: 32,
+    fontSize: 36,
     fontWeight: '800',
     color: '#1E293B',
     textAlign: 'center',
-    marginBottom: 12,
     letterSpacing: -0.5,
   },
   subtitle: {
-    fontSize: 18,
+    fontSize: 19,
     color: '#64748B',
     textAlign: 'center',
-    fontWeight: '500',
+    fontWeight: '600',
+    lineHeight: 28,
   },
   roleContainer: {
-    flexDirection: 'row',
-    gap: 20,
+    gap: 24,
   },
   roleCard: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 24,
-    padding: 40,
+    position: 'relative',
+    flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 28,
+    padding: 32,
+    overflow: 'hidden',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.12,
-    shadowRadius: 20,
-    elevation: 8,
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 0.15,
+    shadowRadius: 24,
+    elevation: 12,
     borderWidth: 1,
     borderColor: '#E2E8F0',
-    transform: [{ scale: 1 }],
+  },
+  cardGradient: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: 'rgba(34, 197, 94, 0.03)',
+    transform: [{ translateX: 40 }, { translateY: -40 }],
   },
   roleIcon: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: 72,
+    height: 72,
+    borderRadius: 36,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 20,
+    marginRight: 24,
+    borderWidth: 3,
+    borderColor: 'rgba(255, 255, 255, 0.8)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
   },
   farmerIcon: {
-    backgroundColor: 'rgba(34, 197, 94, 0.1)',
+    backgroundColor: '#F0FDF4',
   },
   labourIcon: {
-    backgroundColor: 'rgba(139, 69, 19, 0.1)',
+    backgroundColor: '#FEF7ED',
+  },
+  roleContent: {
+    flex: 1,
   },
   roleText: {
-    fontSize: 22,
-    fontWeight: '700',
-    textAlign: 'center',
-    marginBottom: 8,
+    fontSize: 24,
+    fontWeight: '800',
+    marginBottom: 12,
   },
   farmerText: {
     color: '#22C55E',
@@ -170,10 +268,19 @@ const styles = StyleSheet.create({
     color: '#8B4513',
   },
   roleDescription: {
-    fontSize: 14,
+    fontSize: 16,
     color: '#64748B',
-    textAlign: 'center',
-    fontWeight: '500',
-    lineHeight: 20,
+    fontWeight: '600',
+    lineHeight: 24,
+  },
+  roleArrow: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#F8FAFC',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
   },
 });

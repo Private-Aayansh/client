@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Platform, Dimensions } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
 import { apiClient } from '../../utils/api';
 import { phoneAuthService } from '../../utils/phoneAuth';
-import { ArrowLeft, Mail, Phone } from 'lucide-react-native';
+import { ArrowLeft, Mail, Phone, Sparkles, Shield } from 'lucide-react-native';
 import { Logo } from '../../components/Logo';
+
+const { width, height } = Dimensions.get('window');
 
 export default function Login() {
   const router = useRouter();
@@ -92,6 +94,7 @@ export default function Login() {
       <View style={styles.backgroundDecoration}>
         <View style={styles.circle1} />
         <View style={styles.circle2} />
+        <View style={styles.circle3} />
       </View>
       
       {/* reCAPTCHA container for web phone auth */}
@@ -103,30 +106,45 @@ export default function Login() {
         <TouchableOpacity onPress={() => router.push('/auth/role-selection')}>
           <ArrowLeft size={24} color="#374151" />
         </TouchableOpacity>
-        <Logo size="small" variant="horizontal" />
+        <View style={styles.headerLogo}>
+          <Logo size="medium" variant="horizontal" />
+          {/* <View style={styles.headerBadge}>
+            <Shield size={12} color="#FFFFFF" />
+          </View> */}
+        </View>
         <View style={{ width: 24 }} />
       </View>
 
       <View style={styles.content}>
-        <View style={styles.titleSection}>
-          <Text style={styles.title}>{t('auth.loginTitle')}</Text>
+        <View style={styles.heroSection}>
+          <View style={styles.titleContainer}>
+            <View style={styles.titleIcon}>
+              <Sparkles size={24} color="#22C55E" />
+            </View>
+            <Text style={styles.title}>{t('auth.loginTitle')}</Text>
+          </View>
           <Text style={styles.subtitle}>{t('auth.loginSubtitle')}</Text>
         </View>
 
         {apiError ? (
           <View style={styles.errorContainer}>
+            <View style={styles.errorIcon}>
+              <Text style={styles.errorIconText}>!</Text>
+            </View>
             <Text style={styles.errorText}>{apiError}</Text>
           </View>
         ) : null}
 
-        <View style={styles.contactSection}>
+        <View style={styles.formSection}>
           <View style={styles.contactToggle}>
             <TouchableOpacity
               style={[styles.toggleButton, useEmail && styles.toggleButtonActive]}
               onPress={() => setUseEmail(true)}
               activeOpacity={0.8}
             >
-              <Mail size={16} color={useEmail ? '#FFFFFF' : '#6B7280'} />
+              <View style={[styles.toggleIcon, useEmail && styles.toggleIconActive]}>
+                <Mail size={16} color={useEmail ? '#FFFFFF' : '#6B7280'} />
+              </View>
               <Text style={[styles.toggleText, useEmail && styles.toggleTextActive]}>
                 {t('common.email')}
               </Text>
@@ -136,7 +154,9 @@ export default function Login() {
               onPress={() => setUseEmail(false)}
               activeOpacity={0.8}
             >
-              <Phone size={16} color={!useEmail ? '#FFFFFF' : '#6B7280'} />
+              <View style={[styles.toggleIcon, !useEmail && styles.toggleIconActive]}>
+                <Phone size={16} color={!useEmail ? '#FFFFFF' : '#6B7280'} />
+              </View>
               <Text style={[styles.toggleText, !useEmail && styles.toggleTextActive]}>
                 {t('common.phone')}
               </Text>
@@ -189,7 +209,7 @@ export default function Login() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#F7F9FC',
     position: 'relative',
   },
   backgroundDecoration: {
@@ -202,21 +222,30 @@ const styles = StyleSheet.create({
   },
   circle1: {
     position: 'absolute',
-    width: 160,
-    height: 160,
-    borderRadius: 80,
-    backgroundColor: 'rgba(34, 197, 94, 0.06)',
-    top: 100,
-    right: -30,
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    backgroundColor: 'rgba(34, 197, 94, 0.08)',
+    top: 80,
+    right: -50,
   },
   circle2: {
     position: 'absolute',
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    backgroundColor: 'rgba(34, 197, 94, 0.04)',
-    bottom: 200,
-    left: -20,
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    backgroundColor: 'rgba(34, 197, 94, 0.05)',
+    bottom: 150,
+    left: -40,
+  },
+  circle3: {
+    position: 'absolute',
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: 'rgba(34, 197, 94, 0.03)',
+    top: height * 0.4,
+    right: 20,
   },
   header: {
     flexDirection: 'row',
@@ -224,82 +253,138 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 24,
     paddingTop: 60,
-    paddingBottom: 24,
+    paddingBottom: 20,
     backgroundColor: '#FFFFFF',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 8,
     zIndex: 1,
   },
-  title: {
-    fontSize: 32,
-    fontWeight: '800',
-    color: '#1E293B',
-    textAlign: 'center',
-    marginBottom: 12,
-    letterSpacing: -0.5,
+  headerLogo: {
+    position: 'relative',
   },
-  subtitle: {
-    fontSize: 18,
-    color: '#64748B',
-    textAlign: 'center',
-    fontWeight: '500',
-  },
-  titleSection: {
+  headerBadge: {
+    position: 'absolute',
+    top: -4,
+    right: -8,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: '#22C55E',
     alignItems: 'center',
-    marginBottom: 40,
+    justifyContent: 'center',
   },
   content: {
     flex: 1,
     paddingHorizontal: 24,
-    paddingTop: 32,
+    paddingTop: 40,
     zIndex: 1,
   },
+  heroSection: {
+    alignItems: 'center',
+    marginBottom: 48,
+  },
+  titleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  titleIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#F0FDF4',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 12,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: '800',
+    color: '#1E293B',
+    letterSpacing: -0.5,
+  },
+  subtitle: {
+    fontSize: 17,
+    color: '#64748B',
+    textAlign: 'center',
+    fontWeight: '600',
+    lineHeight: 24,
+  },
   errorContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: '#FEF2F2',
     borderColor: '#FECACA',
     borderWidth: 1,
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: 32,
+    gap: 12,
+  },
+  errorIcon: {
+    width: 24,
+    height: 24,
     borderRadius: 12,
-    padding: 16,
-    marginBottom: 20,
+    backgroundColor: '#EF4444',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  errorIconText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '800',
   },
   errorText: {
     color: '#DC2626',
-    fontSize: 15,
-    textAlign: 'center',
-    fontWeight: '500',
+    fontSize: 16,
+    fontWeight: '600',
+    flex: 1,
   },
-  contactSection: {
-    marginBottom: 40,
+  formSection: {
+    marginBottom: 48,
   },
   contactToggle: {
     flexDirection: 'row',
-    backgroundColor: '#F1F5F9',
-    borderRadius: 16,
-    padding: 4,
-    marginBottom: 20,
+    backgroundColor: '#F8FAFC',
+    borderRadius: 20,
+    padding: 6,
+    marginBottom: 32,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
   },
   toggleButton: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 12,
-    borderRadius: 12,
-    gap: 8,
+    paddingVertical: 16,
+    borderRadius: 16,
+    gap: 12,
   },
   toggleButtonActive: {
     backgroundColor: '#22C55E',
     shadowColor: '#22C55E',
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 4,
+    shadowRadius: 12,
+    elevation: 6,
+  },
+  toggleIcon: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: '#F3F4F6',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  toggleIconActive: {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
   },
   toggleText: {
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: '700',
     color: '#6B7280',
   },
@@ -308,31 +393,31 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     width: '100%',
-    marginBottom: 32,
-    borderRadius: 16,
-    paddingVertical: 18,
+    marginBottom: 40,
+    borderRadius: 20,
+    paddingVertical: 20,
     shadowColor: '#22C55E',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 16,
-    elevation: 8,
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 0.4,
+    shadowRadius: 20,
+    elevation: 12,
   },
   footer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom: 32,
+    paddingBottom: 40,
   },
   footerText: {
-    fontSize: 16,
+    fontSize: 17,
     color: '#64748B',
     marginRight: 4,
-    fontWeight: '500',
+    fontWeight: '600',
   },
   footerLink: {
-    fontSize: 16,
+    fontSize: 17,
     color: '#22C55E',
-    fontWeight: '700',
+    fontWeight: '800',
   },
   content: {
     flex: 1,
